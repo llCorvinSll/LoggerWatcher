@@ -1,6 +1,7 @@
 import * as Electron from "electron";
 import * as path from "path";
 import * as url from "url";
+import {runListner} from "./server/server";
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -20,6 +21,8 @@ function createWindow() {
 
     // Open the DevTools.
     win.webContents.openDevTools();
+
+    runListner();
 
     // Emitted when the window is closed.
     win.on('closed', () => {

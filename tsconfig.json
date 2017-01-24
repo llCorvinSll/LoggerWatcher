@@ -9,9 +9,7 @@
     "emitDecoratorMetadata": true,
     "noImplicitAny": true,
     "noUnusedLocals": true,
-    "strictNullChecks": true,
-    "importHelpers": true,
-    "noEmitHelpers": true
+    "strictNullChecks": true
   },
   "exclude": [
     "node_modules"
