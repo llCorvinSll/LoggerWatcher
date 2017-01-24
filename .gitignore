@@ -48,3 +48,9 @@ jspm_packages
 # Yarn Integrity file
 .yarn-integrity
 
+# resulted js
+src/**/*.js
+src/**/*.js.map
+
+# IDEA filse
+.idea
