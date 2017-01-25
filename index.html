@@ -10,4 +10,26 @@ We are using node <script>document.write(process.versions.node)</script>,
 Chrome <script>document.write(process.versions.chrome)</script>,
 and Electron <script>document.write(process.versions.electron)</script>.
 </body>
+
+<!-- inject:js -->
+<!-- endinject -->
+
+
+<script>
+    SystemJS.config({
+        map: {
+            'react': '../node_modules/react/dist/react.js',
+            'react-dom': '../node_modules/react-dom/dist/react-dom.js',
+            'rxjs': '../node_modules/rxjs/bundles/Rx.js',
+            'socket.io': '../node_modules/socket.io/lib/index.js'
+        },
+        packages: {
+            js: {
+                defaultExtension: 'js'
+            }
+        }
+    });
+    SystemJS.import('js/app/app.js');
+</script>
+
 </html>

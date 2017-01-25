@@ -54,3 +54,8 @@ src/**/*.js.map
 
 # IDEA filse
 .idea
+
+
+dist
+
+!src/main.js

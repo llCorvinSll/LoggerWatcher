@@ -1,6 +1,11 @@
-import * as socketIo from "socket.io";
-import * as Rx from "rxjs";
-import * as http from "http";
+import socketIo from "@node/socket.io";
+import Rx from "@node/rxjs";
+import http from "@node/http";
+
+// var Rx = SystemJS._nodeRequire('rxjs');
+// var http = SystemJS._nodeRequire('http');
+//var socketIo = SystemJS._nodeRequire("socket.io");
+
 
 
 export function runListner() {
@@ -8,7 +13,7 @@ export function runListner() {
 
     const io = socketIo(server);
     const sourceConnect = Rx.Observable.create(function (observer:Rx.Observer<any>) {
-        io.on('connection', function (socket) {
+        io.on('connection', function (socket:any) {
             socket.emit('my socketId', {'socketId': socket.id, 'connectTime': Date.now()});
 
             socket.on('message', function (data:any) {
