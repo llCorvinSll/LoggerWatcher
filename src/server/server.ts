@@ -22,15 +22,8 @@ export function runListner() {
         });
     });
 
-
-    sourceConnect
-        .subscribe(function (obj:any) {
-            let data = obj.data;
-            console.log(data);
-            //io.emit('all users', usersMap.toArray());
-        });
-
-
     server.listen(3333);
+
+    return sourceConnect;
 }
 
