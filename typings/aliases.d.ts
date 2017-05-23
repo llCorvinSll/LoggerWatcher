@@ -13,12 +13,12 @@ declare module "@node/socket.io" {
     export = socketIo;
 }
 
-declare module "@node/react" {
-    import * as React from 'react';
-    export = React;
-}
+// declare module "@node/react" {
+//     import * as React from 'react';
+//     export = React;
+// }
 
-declare module "@node/react-dom" {
-    import * as ReactDOM from 'react-dom';
-    export = ReactDOM;
-}
+// declare module "@node/react-dom" {
+//     import * as ReactDOM from 'react-dom';
+//     export = ReactDOM;
+// }

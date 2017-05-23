@@ -1,7 +1,7 @@
+import ReactDOM from 'react-dom';
+import React from 'react';
+import LoggerUI from "./LoggerUI";
 
-import * as ReactDom from "@node/react-dom";
-import Logger from "./logger/Logger";
 
 
-
-ReactDom.render(<Logger />, document.getElementById('app'));
+ReactDOM.render(<LoggerUI />, document.getElementById('app'));
