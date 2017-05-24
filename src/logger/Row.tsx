@@ -15,12 +15,26 @@ export default class Row extends React.Component<RowProps, void> {
     render() {
         let entry = this.props.entry;
 
+        console.log(entry.object);
         return <div className="">
-            <h6>{moment(entry.time).format()}
-                {this.renderLevelLable()}
-                {<span className="label label-default">{this.props.ip}</span>}
+            <h6>{moment(entry.time).format("HH:MM:ss:SSS")} {" "}
+                {this.renderLevelLable()} {" "}
+                {<span className="label label-default">{this.props.ip}</span>} {" "}
                 <span className="label label-default">{entry.tag}</span> {entry.message}</h6>
+            {this.renderObject()}
         </div>
+    }
+
+    private renderObject() {
+        let entry = this.props.entry;
+
+        if(!entry.object) {
+            return "";
+        }
+
+        return <pre>
+            {entry.object}
+        </pre>
     }
 
     private renderLevelLable() {

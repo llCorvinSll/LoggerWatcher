@@ -16,6 +16,7 @@ export enum LogLevel {
 export interface LogEntry {
     level: LogLevel;
     message:string;
+    object:string;
     tag:string;
     time:Date;
 }
@@ -24,8 +25,6 @@ export default class LoggerUI extends React.Component<void, void> {
 
     componentDidMount() {
         runListner().subscribe((obj:any) => {
-
-            console.log(obj.socket);
             this.logs.push(obj);
 
             this.forceUpdate();
