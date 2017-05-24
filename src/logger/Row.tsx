@@ -5,7 +5,7 @@ import moment from 'moment';
 
 interface RowProps {
     entry: LogEntry;
-
+    index:number;
     ip: string;
 }
 
@@ -16,8 +16,8 @@ export default class Row extends React.Component<RowProps, void> {
         let entry = this.props.entry;
 
         console.log(entry.object);
-        return <div className="">
-            <h6>{moment(entry.time).format("HH:MM:ss:SSS")} {" "}
+        return <div className={`LoggerRow  ${ this.props.index  % 2 === 0 ? "LoggerRow--even" : ""}`}>
+            <h6 className="LoggerRow__Head">{moment(entry.time).format("HH:MM:ss:SSS")} {" "}
                 {this.renderLevelLable()} {" "}
                 {<span className="label label-default">{this.props.ip}</span>} {" "}
                 <span className="label label-default">{entry.tag}</span> {entry.message}</h6>
@@ -32,7 +32,7 @@ export default class Row extends React.Component<RowProps, void> {
             return "";
         }
 
-        return <pre>
+        return <pre className="LoggerRow__Code">
             {entry.object}
         </pre>
     }

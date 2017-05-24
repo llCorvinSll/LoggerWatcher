@@ -1,0 +1,33 @@
+
+
+$very-dark-gray: #263238;
+$syntax-text-color:   #EEFFFF;
+
+body {
+  padding-top: 70px;
+
+  background-color: $very-dark-gray;
+
+  color: $syntax-text-color;
+}
+
+.LoggerRow {
+
+  //border-bottom: 1px solid $syntax-text-color;
+
+  &--even {
+    background-color: lighten($very-dark-gray, 10%);
+  }
+
+
+  &__Code {
+    margin-left: 40px;
+  }
+
+  &__Head {
+
+    margin-top: 4px;
+    margin-bottom: 4px;
+
+  }
+}

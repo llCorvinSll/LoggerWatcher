@@ -1,6 +1,7 @@
 import React from 'react';
 import {runListner} from "../server/server";
 import Row from "./Row";
+import TopBar from "./TopBar";
 
 
 export enum LogLevel {
@@ -33,8 +34,9 @@ export default class LoggerUI extends React.Component<void, void> {
 
     render() {
         return <div>
-            {this.logs.map((lg) =>
-                <Row entry={lg.data} ip={lg.socket.client.conn.remoteAddress} />
+            <TopBar />
+            {this.logs.map((lg, index) =>
+                <Row entry={lg.data} index={index} ip={lg.socket.client.conn.remoteAddress} />
             )}
         </div>
     }
