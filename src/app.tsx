@@ -4,4 +4,4 @@ import LoggerUI from "./logger/LoggerUI";
 
 
 
-ReactDOM.render(<LoggerUI />, document.getElementById('app'));
+ReactDOM.render(<LoggerUI/>, document.getElementById('app'));
