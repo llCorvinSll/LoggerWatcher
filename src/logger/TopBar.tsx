@@ -21,12 +21,12 @@ export default class TopBar extends React.Component<void, void> {
                 </div>
 
 
-                    <form className="navbar-form navbar-left">
+                    <div className="navbar-form navbar-left">
                         <div className="form-group">
                             <input type="text" className="form-control" placeholder="Search"></input>
                         </div>
                         <button type="submit" className="btn btn-default">Submit</button>
-                    </form>
+                    </div>
                 </div>
 
         </nav>

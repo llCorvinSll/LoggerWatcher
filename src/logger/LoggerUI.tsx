@@ -1,19 +1,9 @@
 import React from 'react';
-import {runListner} from "../server/server";
 import Row from "./Row";
 import TopBar from "./TopBar";
+import STORAGE from "./Storage";
+import {ItemWrapper, LogLevel} from "../server/server";
 
-
-export enum LogLevel {
-    ALL = 0,
-    TRACE = 1,
-    DEBUG = 2,
-    INFO = 3,
-    WARN = 4,
-    ERROR = 5,
-    FATAL = 6,
-    OFF = 7,
-}
 export interface LogEntry {
     level: LogLevel;
     message:string;
@@ -25,10 +15,11 @@ export interface LogEntry {
 export default class LoggerUI extends React.Component<void, void> {
 
     componentDidMount() {
-        runListner().subscribe((obj:any) => {
-            this.logs.push(obj);
+        STORAGE.getRx().subscribe((logs:ItemWrapper[]) => {
+            this.logs = logs;
 
             this.forceUpdate();
+
         })
     }
 
@@ -36,10 +27,10 @@ export default class LoggerUI extends React.Component<void, void> {
         return <div>
             <TopBar />
             {this.logs.map((lg, index) =>
-                <Row entry={lg.data} index={index} ip={lg.socket.client.conn.remoteAddress} />
+                <Row key={index} entry={lg.data} index={index} ip={lg.ip} />
             )}
         </div>
     }
 
-    private logs:any[] = [];
+    private logs:ItemWrapper[] = [];
 }

@@ -1,6 +1,7 @@
 import React from 'react';
-import {LogEntry, LogLevel} from "./LoggerUI";
+import {LogEntry} from "./LoggerUI";
 import moment from 'moment';
+import {LogLevel} from "../server/server";
 
 
 interface RowProps {
@@ -15,7 +16,6 @@ export default class Row extends React.Component<RowProps, void> {
     render() {
         let entry = this.props.entry;
 
-        console.log(entry.object);
         return <div className={`LoggerRow  ${ this.props.index  % 2 === 0 ? "LoggerRow--even" : ""}`}>
             <h6 className="LoggerRow__Head">{moment(entry.time).format("HH:MM:ss:SSS")} {" "}
                 {this.renderLevelLable()} {" "}

@@ -2,13 +2,22 @@ import socketIo from "@node/socket.io";
 import Rx from "@node/rxjs";
 import http from "@node/http";
 
-// var Rx = SystemJS._nodeRequire('rxjs');
-// var http = SystemJS._nodeRequire('http');
-//var socketIo = SystemJS._nodeRequire("socket.io");
+export enum LogLevel {
+    ALL = 0,
+    TRACE = 1,
+    DEBUG = 2,
+    INFO = 3,
+    WARN = 4,
+    ERROR = 5,
+    FATAL = 6,
+    OFF = 7,
+}
 
-
-
-export function runListner() {
+export interface ItemWrapper {
+    ip:string;
+    data: any;
+}
+export function runListner():Rx.Observable<ItemWrapper> {
     const server = http.createServer();
 
     const io = socketIo(server);
@@ -17,7 +26,7 @@ export function runListner() {
             socket.emit('my socketId', {'socketId': socket.id, 'connectTime': Date.now()});
 
             socket.on('message', function (data:any) {
-                observer.next({'socket': socket, 'data': data, 'event': 'client connect'});
+                observer.next({ip:socket.client.conn.remoteAddress, 'data': data, 'event': 'client connect'});
             });
         });
     });
