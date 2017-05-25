@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var inject = require('gulp-inject');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
+var rename = require("gulp-rename");
 
 
 
@@ -14,19 +15,20 @@ gulp.task('vendor:build', function () {
         .pipe(gulp.dest('dist/js'));
 });
 
-gulp.task('html:build', ['vendor:build'], function () {
+gulp.task('html:build', ['vendor:build', 'sass'], function () {
 
     var sources = gulp.src(['dist/js/vendor.js'], {read: false});
 
-    return gulp.src('index.html')
-        .pipe(inject(sources, {ignorePath: 'dist', addRootSlash: false}))
-        .pipe(gulp.dest('dist'));
+    return gulp.src('index.tmpl')
+        .pipe(inject(sources, {addRootSlash: false}))
+        .pipe(rename('index.html'))
+        .pipe(gulp.dest('./'));
 });
 
 gulp.task('sass', function () {
     return gulp.src('./scss/**/*.scss')
         .pipe(sass.sync().on('error', sass.logError))
-        .pipe(gulp.dest('./dist/css'));
+        .pipe(gulp.dest('./css'));
 });
 
 gulp.task('sass:watch', function () {

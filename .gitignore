@@ -57,5 +57,8 @@ src/**/*.js.map
 
 
 dist
+css
 
 !src/main.js
+
+index.html
