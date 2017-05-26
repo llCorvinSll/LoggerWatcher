@@ -1,4 +1,4 @@
-System.register(["@node/rxjs", "../server/server"], function (exports_1, context_1) {
+System.register(["@reactivex/rxjs", "../server/server"], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var rxjs_1, server_1, Storage, STORAGE;
@@ -26,7 +26,7 @@ System.register(["@node/rxjs", "../server/server"], function (exports_1, context
                 };
                 Storage.prototype.getRx = function () {
                     var _this = this;
-                    this.server_subscribtion = server_1.runListner().subscribe(function (obj) {
+                    this.server_subscription = server_1.runListner().subscribe(function (obj) {
                         _this.logs.getValue().push(obj);
                         _this.logs.next(_this.logs.getValue());
                     });

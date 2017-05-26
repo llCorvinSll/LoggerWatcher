@@ -1,4 +1,4 @@
-import Rx from "@node/rxjs";
+import Rx from '@reactivex/rxjs';
 import {ItemWrapper, LogLevel, runListner} from "../server/server";
 
 
@@ -15,7 +15,7 @@ class Storage {
     }
 
     getRx():Rx.Observable<ItemWrapper[]> {
-        this.server_subscribtion = runListner().subscribe((obj:any) => {
+        this.server_subscription = runListner().subscribe((obj:any) => {
             this.logs.getValue().push(obj);
             this.logs.next(this.logs.getValue());
         });
@@ -30,10 +30,9 @@ class Storage {
         tag: "",
         level: LogLevel,
         ip:""
-    })
+    });
 
-    private server_subscribtion:Rx.Subscription;
-
+    private server_subscription:Rx.Subscription;
 }
 
 
