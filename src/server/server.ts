@@ -1,6 +1,6 @@
-import socketIo from "@node/socket.io";
-import Rx from "@node/rxjs";
-import http from "@node/http";
+import * as socketIo from 'socket.io';
+import Rx from '@reactivex/rxjs';
+import * as http from 'http';
 
 export enum LogLevel {
     ALL = 0,
