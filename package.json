@@ -5,7 +5,8 @@
   "main": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "run": "./node_modules/.bin/electron ./"
+    "run": "./node_modules/.bin/electron ./",
+    "build": "$(npm bin)/gulp build"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-inject": "^4.2.0",
     "gulp-rename": "^1.2.2",
+    "gulp-typescript": "^3.1.7",
     "tslib": "^1.5.0",
     "typescript": "^2.1.5"
   },

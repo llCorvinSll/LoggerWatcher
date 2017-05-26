@@ -3,7 +3,21 @@ var inject = require('gulp-inject');
 var concat = require('gulp-concat');
 var sass = require('gulp-sass');
 var rename = require("gulp-rename");
+var ts = require("gulp-typescript");
 
+
+var tsProject = ts.createProject('tsconfig.json');
+
+gulp.task('ts', function() {
+    var tsResult = gulp.src("src/**/*.ts") // or tsProject.src()
+        .pipe(tsProject());
+
+    return tsResult.js.pipe(gulp.dest('./'));
+});
+
+gulp.task('ts:watch', ['ts'], function() {
+    gulp.watch('src/**/*.ts', ['ts']);
+});
 
 
 gulp.task('vendor:build', function () {
@@ -34,3 +48,6 @@ gulp.task('sass', function () {
 gulp.task('sass:watch', function () {
     gulp.watch('./scss/**/*.scss', ['sass']);
 });
+
+
+gulp.task("build", ['ts', 'html:build', 'sass']);
