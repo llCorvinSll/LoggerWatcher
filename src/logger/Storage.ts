@@ -1,4 +1,4 @@
-import Rx from '@reactivex/rxjs';
+import Rx from 'rxjs';
 import {ItemWrapper, LogLevel, runListner} from "../server/server";
 
 
