@@ -22,3 +22,8 @@ declare module "@node/socket.io" {
      import * as ReactDOM from 'react-dom';
      export = ReactDOM;
  }
+
+declare module "@node/dexie" {
+    import * as Dexie from 'dexie';
+    export = Dexie;
+}

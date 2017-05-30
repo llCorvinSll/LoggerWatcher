@@ -1,5 +1,6 @@
-import Rx from 'rxjs';
+import Rx from "rxjs";
 import {ItemWrapper, LogLevel, runListner} from "../server/server";
+import Dexie from "@node/dexie";
 
 
 interface Filter {
@@ -7,6 +8,11 @@ interface Filter {
     level:LogLevel;
     ip:string;
 }
+
+
+const db = new Dexie("VisionLogs");
+db.version(1).stores({logs: '++id'});
+db.table("logs").clear();
 
 class Storage {
 
@@ -16,8 +22,19 @@ class Storage {
 
     getRx():Rx.Observable<ItemWrapper[]> {
         this.server_subscription = runListner().subscribe((obj:any) => {
-            this.logs.getValue().push(obj);
-            this.logs.next(this.logs.getValue());
+            let table = db.table("logs");
+
+            table
+                .add(obj)
+                .then((id:number) => {
+                    table.where('id').aboveOrEqual(id - 200).toArray((array:ItemWrapper[]) => {
+                        this.logs.next(array)
+                    })
+                });
+
+
+            //this.logs.getValue().push(obj);
+            //this.logs.next(this.logs.getValue());
         });
 
         return this.logs;
