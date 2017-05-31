@@ -20,14 +20,14 @@ export default class LoggerUI extends React.Component<void, void> {
 
             this.forceUpdate();
 
-        })
+        });
     }
 
     render() {
         return <div>
             <TopBar />
             {this.logs.map((lg, index) =>
-                <Row key={index} entry={lg.data} index={index} ip={lg.ip} />
+                <Row key={index} entry={lg.data} index={index} id={lg.id} ip={lg.ip} />
             )}
         </div>
     }

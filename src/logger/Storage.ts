@@ -9,6 +9,8 @@ interface Filter {
     ip:string;
 }
 
+const PAGE_SIZE = 200;
+
 
 const db = new Dexie("VisionLogs");
 db.version(1).stores({logs: '++id'});
@@ -20,21 +22,32 @@ class Storage {
         return this.filter;
     }
 
-    getRx():Rx.Observable<ItemWrapper[]> {
-        this.server_subscription = runListner().subscribe((obj:any) => {
-            let table = db.table("logs");
+    get FirstId():number {
+        return this.first_id;
+    }
 
-            table
+    getRx():Rx.Observable<ItemWrapper[]> {
+
+        this.table = db.table("logs");
+
+        this.server_subscription = runListner().subscribe((obj:any) => {
+            this.table
                 .add(obj)
                 .then((id:number) => {
-                    table.where('id').aboveOrEqual(id - 200).toArray((array:ItemWrapper[]) => {
+                    this.rows_count++;
+
+                    this.pages_count = Math.ceil(this.rows_count / PAGE_SIZE);
+
+                    if (this.first_id === void 0) {
+                        this.first_id = id;
+                    }
+
+                    console.log('count', this.rows_count, this.pages_count);
+
+                    this.table.offset((this.pages_count - 1) * PAGE_SIZE).limit(PAGE_SIZE).toArray((array:ItemWrapper[]) => {
                         this.logs.next(array)
                     })
                 });
-
-
-            //this.logs.getValue().push(obj);
-            //this.logs.next(this.logs.getValue());
         });
 
         return this.logs;
@@ -48,6 +61,14 @@ class Storage {
         level: LogLevel,
         ip:""
     });
+
+    private table:Dexie.Dexie.Table;
+
+    private rows_count:number = 0;
+
+    private pages_count:number = 0;
+
+    private first_id:number;
 
     private server_subscription:Rx.Subscription;
 }
