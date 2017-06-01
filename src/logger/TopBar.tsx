@@ -1,11 +1,12 @@
 import React from "react";
 
 
+export interface TopBarProps {
+    total_pages:number;
+    total_rows:number;
+}
 
-
-export default class TopBar extends React.Component<void, void> {
-
-
+export default class TopBar extends React.Component<TopBarProps, void> {
     render() {
         return <nav className="navbar navbar-default navbar-fixed-top">
             <div className="container-fluid">
@@ -27,6 +28,12 @@ export default class TopBar extends React.Component<void, void> {
                         </div>
                         <button type="submit" className="btn btn-default">Submit</button>
                     </div>
+
+
+                <ul className="nav navbar-nav navbar-right">
+                    <li><p className="navbar-text">Rows: {this.props.total_rows}</p></li>
+                    <li><p className="navbar-text">Pages: {this.props.total_pages}</p></li>
+                </ul>
                 </div>
 
         </nav>

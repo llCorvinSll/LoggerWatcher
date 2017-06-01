@@ -30,6 +30,10 @@ class Storage {
         return this.pages_count;
     }
 
+    get TotalRows():number {
+        return this.rows_count;
+    }
+
     get CurrentPage():number {
         return this.current_page;
     }

@@ -26,7 +26,7 @@ export default class LoggerUI extends React.Component<void, void> {
 
     render() {
         return <div>
-            <TopBar />
+            <TopBar total_pages={STORAGE.TotalPages} total_rows={STORAGE.TotalRows} />
 
             <Pagination total_pages={STORAGE.TotalPages} current_page={STORAGE.CurrentPage} />
             {this.logs.map((lg, index) =>
