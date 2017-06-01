@@ -1,7 +1,7 @@
 import React from 'react';
 import Row from "./Row";
 import TopBar from "./TopBar";
-import STORAGE from "./Storage";
+import STORAGE, {Page} from "./Storage";
 import {ItemWrapper, LogLevel} from "../server/server";
 import Pagination from "./Pagination";
 
@@ -13,28 +13,40 @@ export interface LogEntry {
     time:Date;
 }
 
-export default class LoggerUI extends React.Component<void, void> {
+export interface LoggerUIState extends Page {
+
+}
+
+export default class LoggerUI extends React.Component<void, LoggerUIState> {
+
+    constructor(p:any,s:any) {
+        super(p,s);
+
+        this.state = {
+            items: [],
+            page: 1,
+            pages_count: 1
+        }
+
+    }
+
 
     componentDidMount() {
-        STORAGE.getRx().subscribe((logs:ItemWrapper[]) => {
-            this.logs = logs;
-
-            this.forceUpdate();
-
+        STORAGE.getRx().subscribe((logs:Page) => {
+            this.setState(logs);
         });
     }
 
     render() {
         return <div>
-            <TopBar total_pages={STORAGE.TotalPages} total_rows={STORAGE.TotalRows} />
+            <TopBar total_pages={this.state.pages_count} total_rows={STORAGE.TotalRows} />
 
-            <Pagination total_pages={STORAGE.TotalPages} current_page={STORAGE.CurrentPage} />
-            {this.logs.map((lg, index) =>
+            <Pagination total_pages={this.state.pages_count} current_page={this.state.page} />
+            {this.state.items.map((lg, index) =>
                 <Row key={index} entry={lg.data} index={index} id={lg.id} ip={lg.ip} />
             )}
-            <Pagination total_pages={STORAGE.TotalPages} current_page={STORAGE.CurrentPage} />
+            <Pagination total_pages={this.state.pages_count} current_page={this.state.page} />
         </div>
     }
 
-    private logs:ItemWrapper[] = [];
 }
