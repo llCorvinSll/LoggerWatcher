@@ -26,6 +26,18 @@ class Storage {
         return this.first_id;
     }
 
+    get TotalPages():number {
+        return this.pages_count;
+    }
+
+    get CurrentPage():number {
+        return this.current_page;
+    }
+    
+    setPage(page:number):void {
+        this.current_page = page;
+    }
+
     getRx():Rx.Observable<ItemWrapper[]> {
 
         this.table = db.table("logs");
@@ -36,7 +48,17 @@ class Storage {
                 .then((id:number) => {
                     this.rows_count++;
 
+                    let auto_scroll = false;
+
+                    if(this.current_page === this.pages_count) {
+                        auto_scroll = true;
+                    }
+
                     this.pages_count = Math.ceil(this.rows_count / PAGE_SIZE);
+
+                    if(auto_scroll) {
+                        this.current_page = this.pages_count;
+                    }
 
                     if (this.first_id === void 0) {
                         this.first_id = id;
@@ -44,7 +66,7 @@ class Storage {
 
                     console.log('count', this.rows_count, this.pages_count);
 
-                    this.table.offset((this.pages_count - 1) * PAGE_SIZE).limit(PAGE_SIZE).toArray((array:ItemWrapper[]) => {
+                    this.table.offset((this.current_page - 1) * PAGE_SIZE).limit(PAGE_SIZE).toArray((array:ItemWrapper[]) => {
                         this.logs.next(array)
                     })
                 });
@@ -66,7 +88,9 @@ class Storage {
 
     private rows_count:number = 0;
 
-    private pages_count:number = 0;
+    private pages_count:number = 1;
+
+    private current_page:number = 1;
 
     private first_id:number;
 

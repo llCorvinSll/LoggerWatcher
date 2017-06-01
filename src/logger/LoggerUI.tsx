@@ -3,6 +3,7 @@ import Row from "./Row";
 import TopBar from "./TopBar";
 import STORAGE from "./Storage";
 import {ItemWrapper, LogLevel} from "../server/server";
+import Pagination from "./Pagination";
 
 export interface LogEntry {
     level: LogLevel;
@@ -26,9 +27,12 @@ export default class LoggerUI extends React.Component<void, void> {
     render() {
         return <div>
             <TopBar />
+
+            <Pagination total_pages={STORAGE.TotalPages} current_page={STORAGE.CurrentPage} />
             {this.logs.map((lg, index) =>
                 <Row key={index} entry={lg.data} index={index} id={lg.id} ip={lg.ip} />
             )}
+            <Pagination total_pages={STORAGE.TotalPages} current_page={STORAGE.CurrentPage} />
         </div>
     }
 

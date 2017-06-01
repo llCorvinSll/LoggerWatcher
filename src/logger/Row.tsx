@@ -17,7 +17,7 @@ export default class Row extends React.Component<RowProps, void> {
     render() {
         let entry = this.props.entry;
 
-        return <div ref={"main"} className={`LoggerRow  ${ this.props.index  % 2 === 0 ? "LoggerRow--even" : ""}`}>
+        return <div ref={"main"} className={`LoggerRow  ${ this.props.id  % 2 === 0 ? "LoggerRow--even" : ""}`}>
             <h6 className="LoggerRow__Head">{moment(entry.time).format("HH:MM:ss:SSS")} {" "}
                 {this.renderLevelLable()} {" "}
                 {<span className="label label-default">{this.props.ip}</span>} {" "}
