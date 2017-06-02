@@ -2,6 +2,8 @@ import Rx from "@node/rxjs";
 import {ItemWrapper, LogLevel, runListner} from "../server/server";
 import Dexie from "@node/dexie";
 
+const {dialog} = require('electron').remote;
+
 
 export interface Filter {
     tag: string;
@@ -25,6 +27,27 @@ const PAGE_SIZE = 200;
 
 
 class Storage {
+
+    saveAll() {
+        dialog.showSaveDialog({
+                title: "Save all",
+                defaultPath: "",
+                /**
+                 * Custom label for the confirmation button, when left empty the default label will be used.
+                 */
+                buttonLabel: "save",
+                /**
+                 * File types that can be displayed, see dialog.showOpenDialog for an example.
+                 */
+                filters: [{
+                    name: "",
+                    extensions: ["json"],
+                }]
+            }
+            , (file:string) => {
+                console.log(file);
+            })
+    }
 
     getFilter():void {
         return this.filter;

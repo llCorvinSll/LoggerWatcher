@@ -10,3 +10,7 @@ export function SetPage(page:number):void {
 export function SetFilter(filter:Filter):void {
     STORAGE.setFilter(filter);
 }
+
+export function SaveAll():void {
+    STORAGE.saveAll();
+}

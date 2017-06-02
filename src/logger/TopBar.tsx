@@ -1,6 +1,6 @@
 import React from "react";
 import {Filter} from "./Storage";
-import {SetFilter} from "./StorageActions";
+import {SaveAll, SetFilter} from "./StorageActions";
 
 
 export interface TopBarProps {
@@ -51,6 +51,8 @@ class FilterForm extends React.Component<Filter, InputState> {
                 />
             </div>
             <button type="submit" className="btn btn-default" onClick={() => this.submitFilter()}>Filter</button>
+
+            <button type="button" className="btn btn-default navbar-btn" onClick={() => SaveAll()}>Save All</button>
         </div>
     }
 
