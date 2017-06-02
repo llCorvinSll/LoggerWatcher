@@ -27,7 +27,7 @@ export function runListner():Rx.Observable<ItemWrapper> {
             socket.emit('my socketId', {'socketId': socket.id, 'connectTime': Date.now()});
 
             socket.on('message', function (data:any) {
-                observer.next({ip:socket.client.conn.remoteAddress, 'data': data, 'event': 'client connect'});
+                observer.next({ip:socket.request.connection.remoteAddress, 'data': data, 'event': 'client connect'});
             });
         });
     });

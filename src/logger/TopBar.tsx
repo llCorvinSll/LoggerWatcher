@@ -4,8 +4,8 @@ import {SetFilter} from "./StorageActions";
 
 
 export interface TopBarProps {
-    total_pages:number;
     total_rows:number;
+    filtered_rows: number;
     filter:Filter;
 }
 
@@ -29,20 +29,20 @@ class FilterForm extends React.Component<Filter, InputState> {
     render() {
         return <div className="navbar-form navbar-left">
             <div className="form-group">
+                {/*<input*/}
+                    {/*type="text"*/}
+                    {/*className="form-control"*/}
+                    {/*placeholder="ip"*/}
+                    {/*ref="ip"*/}
+                    {/*value={this.state.ip}*/}
+                    {/*onChange={() => this.handleChange()}*/}
+                    {/*onFocus={() => this.handleFocus(true)}*/}
+                    {/*onBlur={() => this.handleFocus(false)}*/}
+                {/*/>*/}
                 <input
                     type="text"
                     className="form-control"
-                    placeholder="ip"
-                    ref="ip"
-                    value={this.state.ip}
-                    onChange={() => this.handleChange()}
-                    onFocus={() => this.handleFocus(true)}
-                    onBlur={() => this.handleFocus(false)}
-                />
-                <input
-                    type="text"
-                    className="form-control"
-                    placeholder="tag"
+                    placeholder="tag1,tag2..."
                     ref="tag"
                     value={this.state.tag}
                     onChange={() => this.handleChange()}
@@ -109,8 +109,8 @@ export default class TopBar extends React.Component<TopBarProps, void> {
                 <FilterForm {...this.props.filter} />
 
                 <ul className="nav navbar-nav navbar-right">
-                    <li><p className="navbar-text">Rows: {this.props.total_rows}</p></li>
-                    <li><p className="navbar-text">Pages: {this.props.total_pages}</p></li>
+                    <li><p className="navbar-text">Total: {this.props.total_rows}</p></li>
+                    <li><p className="navbar-text">Filtered: {this.props.filtered_rows}</p></li>
                 </ul>
                 </div>
 

@@ -12,21 +12,22 @@ export interface Filter {
 export interface Page {
     items:ItemWrapper[];
     page:number;
+
+    total_rows:number;
+    filtered_rows:number;
+
     pages_count:number;
+
     filter: Filter;
 }
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 200;
 
 
 class Storage {
 
     getFilter():void {
         return this.filter;
-    }
-
-    get TotalRows():number {
-        return this.rows_count;
     }
 
     setPage(page:number):void {
@@ -40,7 +41,7 @@ class Storage {
     getRx():Rx.Observable<ItemWrapper[]> {
         this.init().then(() => {
             this.setupRx();
-        })
+        });
 
         return this.logs_page;
     }
@@ -73,8 +74,6 @@ class Storage {
         }).distinctUntilChanged().combineLatest(this.server_subscription, (page:number, filtred_data:any) => {
             let {rows_count, filter} = filtred_data;
 
-            console.log("server_subscription ", rows_count);
-
             let cur_page = page;
 
             let auto_scroll = this.is_autoscroll;
@@ -95,7 +94,11 @@ class Storage {
                 this.logs_page.next({
                     items: array,
                     page: cur_page,
+                    total_rows: this.rows_count,
+                    filtered_rows: rows_count,
+
                     pages_count: this.pages_count,
+
                     filter: this.filter.getValue()
                 })
             })
@@ -112,14 +115,13 @@ class Storage {
             this.db.version(1).stores({
                 logs: [
                     '++id',
-                    'data.tag'
+                    'data.tag',
+                    'ip'
                 ].join(',')
             });
 
             this.db.open();
-
             this.db.table("logs").clear();
-
 
             this.table = this.db.table("logs");
         });
@@ -127,9 +129,15 @@ class Storage {
     }
 
     private applyFilter(filter:Filter) {
-        return this.table
-            .where("data.tag")
-            .startsWith(filter.tag)
+        let result = this.table;
+
+        if (filter.tag) {
+            result = result
+                .where("data.tag")
+                .anyOfIgnoreCase(filter.tag.split(','));
+        }
+
+        return result;
     }
 
     private logs_page:Rx.BehaviorSubject<Page> = new Rx.BehaviorSubject({

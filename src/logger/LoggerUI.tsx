@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import Row from "./Row";
 import TopBar from "./TopBar";
 import STORAGE, {Page} from "./Storage";
@@ -25,11 +25,13 @@ export default class LoggerUI extends React.Component<void, LoggerUIState> {
         this.state = {
             items: [],
             page: 1,
+            total_rows: 0,
+            filtered_rows: 0,
             pages_count: 1,
             filter: {
-                tag: "tag",
+                tag: "",
                 level:LogLevel.ALL,
-                ip:"1.1.1.1"
+                ip:""
             }
         }
 
@@ -44,7 +46,8 @@ export default class LoggerUI extends React.Component<void, LoggerUIState> {
 
     render() {
         return <div>
-            <TopBar total_pages={this.state.pages_count} total_rows={STORAGE.TotalRows} filter={this.state.filter} />
+            <TopBar filtered_rows={this.state.filtered_rows} total_rows={this.state.total_rows}
+                    filter={this.state.filter}/>
 
             <Pagination total_pages={this.state.pages_count} current_page={this.state.page} />
             {this.state.items.map((lg, index) =>
