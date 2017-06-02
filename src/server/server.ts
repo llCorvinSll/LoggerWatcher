@@ -1,5 +1,5 @@
 import socketIo from "@node/socket.io";
-import Rx from "rxjs";
+import Rx from "@node/rxjs";
 import http from "@node/http";
 
 export enum LogLevel {

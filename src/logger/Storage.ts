@@ -1,4 +1,4 @@
-import Rx from "rxjs";
+import Rx from "@node/rxjs";
 import {ItemWrapper, LogLevel, runListner} from "../server/server";
 import Dexie from "@node/dexie";
 
@@ -19,10 +19,6 @@ export interface Page {
 const PAGE_SIZE = 5;
 
 
-const db = new Dexie("VisionLogs");
-db.version(1).stores({logs: '++id'});
-db.table("logs").clear();
-
 class Storage {
 
     getFilter():void {
@@ -42,8 +38,14 @@ class Storage {
     }
 
     getRx():Rx.Observable<ItemWrapper[]> {
-        this.table = db.table("logs");
+        this.init().then(() => {
+            this.setupRx();
+        })
 
+        return this.logs_page;
+    }
+
+    private setupRx():void {
         this.server_subscription = runListner()
             .map((obj:any) => Rx.Observable.fromPromise(this.table.add(obj)))
             .concatAll()
@@ -51,32 +53,43 @@ class Storage {
                 this.rows_count++;
 
                 return id;
-            });
+            }).combineLatest(this.filter, (id:number, filter:Filter) => {
+                let promise = this.applyFilter(filter).count();
+
+                return Rx.Observable.fromPromise(promise.then((count:number) => {
+                    return {
+                        rows_count: count,
+                        filter: filter
+                    };
+                }));
+            })
+            .concatAll();
+
 
         this.current_page_rx.map((page:number) => {
             this.is_autoscroll = false;
 
             return page;
-        }).distinctUntilChanged().combineLatest(this.server_subscription, (page:number, id:number) => {
+        }).distinctUntilChanged().combineLatest(this.server_subscription, (page:number, filtred_data:any) => {
+            let {rows_count, filter} = filtred_data;
+
+            console.log("server_subscription ", rows_count);
+
             let cur_page = page;
 
             let auto_scroll = this.is_autoscroll;
 
-            if(cur_page === this.pages_count) {
+            if (cur_page === this.pages_count) {
                 auto_scroll = true;
             }
 
-            this.pages_count = Math.ceil(this.rows_count / PAGE_SIZE);
+            this.pages_count = Math.ceil(rows_count / PAGE_SIZE);
 
             if (auto_scroll) {
                 cur_page = this.pages_count;
             }
 
-            if (this.first_id === void 0) {
-                this.first_id = id;
-            }
-
-            this.table.offset((cur_page - 1) * PAGE_SIZE).limit(PAGE_SIZE).toArray((array:ItemWrapper[]) => {
+            this.applyFilter(filter).offset((cur_page - 1) * PAGE_SIZE).limit(PAGE_SIZE).toArray((array:ItemWrapper[]) => {
                 this.is_autoscroll = auto_scroll;
 
                 this.logs_page.next({
@@ -89,9 +102,34 @@ class Storage {
 
 
         }).subscribe();
+    }
+
+    private init():Dexie.Dexie.Promise {
+        let db = new Dexie("VisionLogs");
+        return db.delete().then(() => {
+            this.db = new Dexie("VisionLogs");
+
+            this.db.version(1).stores({
+                logs: [
+                    '++id',
+                    'data.tag'
+                ].join(',')
+            });
+
+            this.db.open();
+
+            this.db.table("logs").clear();
 
 
-        return this.logs_page;
+            this.table = this.db.table("logs");
+        });
+
+    }
+
+    private applyFilter(filter:Filter) {
+        return this.table
+            .where("data.tag")
+            .startsWith(filter.tag)
     }
 
     private logs_page:Rx.BehaviorSubject<Page> = new Rx.BehaviorSubject({
@@ -100,22 +138,21 @@ class Storage {
     });
 
     private filter: Rx.BehaviorSubject<Filter> = new Rx.BehaviorSubject({
-        tag: "asd",
+        tag: "",
         level: LogLevel,
-        ip:"10.10.10.10"
+        ip: ""
     });
 
     private is_autoscroll:boolean = false;
 
     private table:Dexie.Dexie.Table;
+    private db:Dexie.Dexie;
 
     private rows_count:number = 0;
 
     private pages_count:number = 1;
 
     private current_page_rx:Rx.BehaviorSubject<number> = new Rx.BehaviorSubject(1);
-
-    private first_id:number;
 
     private server_subscription:Rx.Subscription;
 }
