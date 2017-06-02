@@ -3,9 +3,9 @@ import {ItemWrapper, LogLevel, runListner} from "../server/server";
 import Dexie from "@node/dexie";
 
 
-interface Filter {
+export interface Filter {
     tag: string;
-    level:LogLevel;
+    level?:LogLevel;
     ip:string;
 }
 
@@ -13,6 +13,7 @@ export interface Page {
     items:ItemWrapper[];
     page:number;
     pages_count:number;
+    filter: Filter;
 }
 
 const PAGE_SIZE = 5;
@@ -28,16 +29,16 @@ class Storage {
         return this.filter;
     }
 
-    get TotalPages():number {
-        return this.pages_count;
-    }
-
     get TotalRows():number {
         return this.rows_count;
     }
 
     setPage(page:number):void {
         this.current_page_rx.next(page);
+    }
+
+    setFilter(filter:Filter):void {
+        this.filter.next(filter);
     }
 
     getRx():Rx.Observable<ItemWrapper[]> {
@@ -81,7 +82,8 @@ class Storage {
                 this.logs_page.next({
                     items: array,
                     page: cur_page,
-                    pages_count: this.pages_count
+                    pages_count: this.pages_count,
+                    filter: this.filter.getValue()
                 })
             })
 
@@ -98,9 +100,9 @@ class Storage {
     });
 
     private filter: Rx.BehaviorSubject<Filter> = new Rx.BehaviorSubject({
-        tag: "",
+        tag: "asd",
         level: LogLevel,
-        ip:""
+        ip:"10.10.10.10"
     });
 
     private is_autoscroll:boolean = false;

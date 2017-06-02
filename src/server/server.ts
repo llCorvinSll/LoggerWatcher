@@ -1,6 +1,6 @@
-import socketIo from '@node/socket.io';
-import Rx from 'rxjs';
-import http from '@node/http';
+import socketIo from "@node/socket.io";
+import Rx from "rxjs";
+import http from "@node/http";
 
 export enum LogLevel {
     ALL = 0,
@@ -14,6 +14,7 @@ export enum LogLevel {
 }
 
 export interface ItemWrapper {
+    id:number;
     ip:string;
     data: any;
 }
